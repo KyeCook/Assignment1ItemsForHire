@@ -1,8 +1,9 @@
 """
-CP1404 - Assignment 1 :2016
+CP1404 - Assignment 1 : 2016
 Items For Hire
 Kye Cook
 29/03/2016
+GitHub Repository Link : https://github.com/KyeCook
 
 Pseudocode:
 
