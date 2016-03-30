@@ -26,16 +26,52 @@ Function Main()
             display error message
         display MENU
         get choice
-    print display thank you message and number of items saved into list
+    print thank you message and number of items saved into list
+
 
 Function load_items()
     load items.csv document
     convert into tuple (?here or in main?)
     return loaded document
 
+
 Function hire_items()
+    get choice
+    if choice is in stock
+        display item hired
+        return item hired
+    else:
+        print item is not currently in stock
 
-Function return_items()
 
-Function add_items()
+Function return_items(items)
+    while items are hired
+        get choice
+        if choice is in items
+            make item returned on list
+            return items
+        else
+            print error message
+    print no items are hired
+
+
+Function add_items(items)
+    get choice for item name
+    get choice for description
+    get choice for price per day
+    print item name(description), price per day now available for hire
+    concatenate to items tuple
+    return items
 """
+
+
+def main():
+    items = load_items()
+    print(items)
+
+
+def load_items():
+    loaded_items = open("items.csv", 'r')
+    items = loaded_items.read()
+    return items
+main()
