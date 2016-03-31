@@ -63,15 +63,46 @@ Function add_items(items)
     concatenate to items tuple
     return items
 """
+MENU = "Menu:\n(L)ist all items\n(H)ire an item\n(R)eturn an item\n(A)dd enw item to stock\n(Q)uit"
 
 
 def main():
+    print("Welcome to the Items For Hire Program")
+    print("Written by Kye Cook, March 2016")
+
     items = load_items()
-    print(items)
+
+    print(MENU)
+    menu_selection = input(">>> ").upper()
+    while menu_selection != "Q":
+        if menu_selection == "L":
+            print("All items on file (* indicates item is currently out):\n", items, sep='')
+        elif menu_selection == "H":
+            print(hire_items(items))
+        else:
+            print("Error")
+        print(MENU)
+        menu_selection = input(">>> ").upper()
+    print("{} items saved to items.csv\nHave a nice day :)")
 
 
 def load_items():
     loaded_items = open("items.csv", 'r')
     items = loaded_items.read()
     return items
+
+
+def hire_items(items):
+    print(items)
+    print("Enter the number of an item to hire:")
+    hired_item = input(">>> ")
+    if items[-1] != '*':
+        if hired_item in items:
+            hired_item_msg = "wunderbra"
+            return hired_item_msg
+        else:
+            hired_item_msg = "Nicht gut"
+            return hired_item_msg
+
+    # Need to read lines of file rather than whole file
 main()
