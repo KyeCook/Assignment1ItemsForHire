@@ -91,6 +91,8 @@ def load_items():
     items = loaded_items.read()
     return items
 
+# Refer to practice py file for better way to load in .csv file
+
 
 def hire_items(items):
     print(items)
@@ -105,5 +107,5 @@ def hire_items(items):
             hired_item_msg = "Nicht gut"
             return hired_item_msg
 
-    # Need to read lines of file rather than whole file
+    # Refer to practice py file
 main()
