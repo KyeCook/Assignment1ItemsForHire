@@ -28,8 +28,13 @@ for row in csv_f:
         item_availability.append("*")
     else:
         item_availability.append("")
+    items = ("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                            item_descriptions[item_id_count], item_costs[item_id_count],
+                                            item_availability[item_id_count]))
+    print(items)
 
 # Following code can be used for hire function
+
 print("Enter number of item to hire")
 item_to_hire = int(input(">>> "))
 if item_to_hire in item_id:
