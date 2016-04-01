@@ -63,6 +63,8 @@ Function add_items(items)
     concatenate to items tuple
     return items
 """
+import csv
+
 MENU = "Menu:\n(L)ist all items\n(H)ire an item\n(R)eturn an item\n(A)dd enw item to stock\n(Q)uit"
 
 
@@ -70,15 +72,15 @@ def main():
     print("Welcome to the Items For Hire Program")
     print("Written by Kye Cook, March 2016")
 
-    items = load_items()
+    item_id, item_names, item_descriptions, item_costs, item_availability, items = load_items()
 
     print(MENU)
     menu_selection = input(">>> ").upper()
     while menu_selection != "Q":
         if menu_selection == "L":
-            print("All items on file (* indicates item is currently out):\n", items, sep='')
+            print("All items on file (* indicates item is currently out):\n", items)
         elif menu_selection == "H":
-            print(hire_items(items))
+            print(hire_items(item_id, item_names, item_descriptions, item_costs, item_availability,))
         else:
             print("Error")
         print(MENU)
@@ -87,25 +89,43 @@ def main():
 
 
 def load_items():
-    loaded_items = open("items.csv", 'r')
-    items = loaded_items.read()
-    return items
+    f = open('items.csv')
+    csv_f = csv.reader(f)
 
-# Refer to practice py file for better way to load in .csv file
+    item_names = []
+    item_descriptions = []
+    item_costs = []
+    item_availability = []
+    item_id = []
 
+    item_id_count = -1
 
-def hire_items(items):
-    print(items)
-    print("Enter the number of an item to hire:")
-    hired_item = input(">>> ")
-    if items[-2] != '*':
-        print(items[-2])
-        if hired_item in items:
-            hired_item_msg = "wunderbra"
-            return hired_item_msg
+    for row in csv_f:
+        item_id_count += 1
+
+        item_id.append(item_id_count)
+        item_names.append(row[0])
+        item_descriptions.append(row[1])
+        item_costs.append(row[2])
+
+        if row[3] == "out":
+            item_availability.append("*")
         else:
-            hired_item_msg = "Nicht gut"
-            return hired_item_msg
+            item_availability.append("")
+        items =("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                              item_descriptions[item_id_count], item_costs[item_id_count],
+                                              item_availability[item_id_count]))
+        return item_id, item_names, item_descriptions, item_costs, item_availability, items
 
-    # Refer to practice py file
+
+def hire_items(item_id, item_names, item_descriptions, item_costs, item_availability,):
+    print("Enter number of item to hire")
+    item_to_hire = int(input(">>> "))
+    if item_to_hire in item_id:
+        item_availability[item_to_hire] = "*"
+        print("{} - {} ({}) = $ {}{}".format(item_id[item_to_hire], item_names[item_to_hire],
+                                             item_descriptions[item_to_hire], item_costs[item_to_hire],
+                                             item_availability[item_to_hire]))
+    else:
+        print("That item is not available for hire")
 main()
