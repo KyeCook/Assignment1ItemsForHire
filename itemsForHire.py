@@ -65,7 +65,7 @@ Function add_items(items)
 """
 import csv
 
-MENU = "Menu:\n(L)ist all items\n(H)ire an item\n(R)eturn an item\n(A)dd enw item to stock\n(Q)uit"
+MENU = "Menu:\n(L)ist all items\n(H)ire an item\n(R)eturn an item\n(A)dd new item to stock\n(Q)uit"
 
 
 def main():
@@ -78,14 +78,17 @@ def main():
     menu_selection = input(">>> ").upper()
     while menu_selection != "Q":
         if menu_selection == "L":
-            print("All items on file (* indicates item is currently out):\n", items)
+            print("All items on file (* indicates item is currently out):")
+            for line in items:
+                print(line)
+
         elif menu_selection == "H":
-            print(hire_items(item_id, item_names, item_descriptions, item_costs, item_availability,))
+            hire_items(item_id, item_availability, items)
         else:
             print("Error")
         print(MENU)
         menu_selection = input(">>> ").upper()
-    print("{} items saved to items.csv\nHave a nice day :)")
+    print("{} items saved to items.csv\nHave a nice day :)".format(len(item_id)))
 
 
 def load_items():
@@ -97,6 +100,7 @@ def load_items():
     item_costs = []
     item_availability = []
     item_id = []
+    items = []
 
     item_id_count = -1
 
@@ -112,20 +116,23 @@ def load_items():
             item_availability.append("*")
         else:
             item_availability.append("")
-        items =("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
-                                              item_descriptions[item_id_count], item_costs[item_id_count],
-                                              item_availability[item_id_count]))
-        return item_id, item_names, item_descriptions, item_costs, item_availability, items
+        items.append("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                                    item_descriptions[item_id_count], item_costs[item_id_count],
+                                                    item_availability[item_id_count]))
+
+    return item_id, item_names, item_descriptions, item_costs, item_availability, items
 
 
-def hire_items(item_id, item_names, item_descriptions, item_costs, item_availability,):
+def hire_items(item_id, item_availability, items):
+    for line in items:
+        print(line)
     print("Enter number of item to hire")
     item_to_hire = int(input(">>> "))
     if item_to_hire in item_id:
         item_availability[item_to_hire] = "*"
-        print("{} - {} ({}) = $ {}{}".format(item_id[item_to_hire], item_names[item_to_hire],
-                                             item_descriptions[item_to_hire], item_costs[item_to_hire],
-                                             item_availability[item_to_hire]))
+
+        items[item_to_hire] += '*'
+        return item_availability[item_to_hire]
     else:
         print("That item is not available for hire")
 main()
