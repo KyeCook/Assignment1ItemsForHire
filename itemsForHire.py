@@ -83,7 +83,9 @@ def main():
                 print(line)
 
         elif menu_selection == "H":
-            hire_items(item_id,item_names, item_availability, item_costs, items)
+            hire_items(item_id ,item_names, item_availability, item_costs, items)
+        elif menu_selection == "R":
+            return_items(item_id, item_names, item_availability, item_costs, items)
         else:
             print("Error")
         print(MENU)
@@ -136,4 +138,21 @@ def hire_items(item_id,item_names, item_availability, item_costs, items):
         return item_availability[item_to_hire]
     else:
         print("That item is not available for hire")
+
+
+def return_items(item_id,item_names, item_availability, item_costs, items):
+    for line in items:
+        print(line)
+    print("Enter number of item to return")
+    item_to_return = int(input(">>> "))
+    if item_to_return in item_id:
+        item_availability[item_to_return] = ""
+
+        items[item_to_return] += " "
+        print("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
+                                        item_costs[item_to_return], item_availability[item_to_return]))
+        print(item_names[item_to_return], "returned")
+        return item_availability[item_to_return]
+    else:
+        print("That item is not on hire")
 main()
