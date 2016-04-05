@@ -72,7 +72,7 @@ def main():
     print("Welcome to the Items For Hire Program")
     print("Written by Kye Cook, March 2016")
 
-    item_id, item_names, item_descriptions, item_costs, item_availability, items = load_items()
+    item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count = load_items()
 
     print(MENU)
     menu_selection = input(">>> ").upper()
@@ -83,9 +83,11 @@ def main():
                 print(line)
 
         elif menu_selection == "H":
-            hire_items(item_id ,item_names, item_availability, item_costs, items)
+            hire_items(item_id, item_names, item_availability, item_costs, items)
         elif menu_selection == "R":
             return_items(item_id, item_names, item_availability, item_costs, items)
+        elif menu_selection == "A":
+            add_items(item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count)
         else:
             print("Error")
         print(MENU)
@@ -112,17 +114,17 @@ def load_items():
         item_id.append(item_id_count)
         item_names.append(row[0])
         item_descriptions.append(row[1])
-        item_costs.append(row[2])
+        item_costs.append(float(row[2]))
 
         if row[3] == "out":
             item_availability.append("*")
         else:
             item_availability.append("")
-        items.append("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
+        items.append("{} - {} ({}) = $ {:.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
                                                     item_descriptions[item_id_count], item_costs[item_id_count],
                                                     item_availability[item_id_count]))
 
-    return item_id, item_names, item_descriptions, item_costs, item_availability, items
+    return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count
 
 
 def hire_items(item_id, item_names, item_availability, item_costs, items):
@@ -139,7 +141,7 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
             if item_to_hire > (len(item_id) - 1):
                 print("Invalid item number")
             elif item_to_hire in item_id and "*" not in items[item_to_hire]:
-                item_availability[item_to_hire] = "*"
+                # item_availability[item_to_hire] = "*"
 
                 items[item_to_hire] += '*'
                 print("{} hired for ${}".format(item_names[item_to_hire], item_costs[item_to_hire]))
@@ -155,7 +157,7 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
             print("Invalid input, enter a number")
 
 
-def return_items(item_id,item_names, item_availability, item_costs, items):
+def return_items(item_id, item_names, item_availability, item_costs, items):
     for line in items:
         print(line)
     print("Enter number of item to return")
@@ -170,4 +172,23 @@ def return_items(item_id,item_names, item_availability, item_costs, items):
         return item_availability[item_to_return]
     else:
         print("That item is not on hire")
+
+
+def add_items(item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count):
+    item_id_count += 1
+    item_id.append(item_id_count)
+
+    item_availability.append("")
+
+    item_names.append(input("Item name:"))
+    item_descriptions.append(input("Description:"))
+    item_costs.append(float(input("Price per day: $")))
+
+    print("{} ({}), ${:.2f} now available for hire".format(item_names[item_id_count], item_descriptions[item_id_count],
+                                                           item_costs[item_id_count]))
+
+    items.append("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                                item_descriptions[item_id_count], item_costs[item_id_count],
+                                                item_availability[item_id_count]))
+    return items, item_names, item_costs, item_id_count, item_descriptions, item_availability
 main()
