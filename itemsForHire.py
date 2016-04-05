@@ -120,9 +120,9 @@ def load_items():
             item_availability.append("*")
         else:
             item_availability.append("")
-        items.append("{} - {} ({}) = $ {:.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
-                                                    item_descriptions[item_id_count], item_costs[item_id_count],
-                                                    item_availability[item_id_count]))
+        items.append("{} - {} ({}) = $ {:>7.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                                          item_descriptions[item_id_count], item_costs[item_id_count],
+                                                          item_availability[item_id_count]))
 
     return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count
 
@@ -175,20 +175,40 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
 
 
 def add_items(item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count):
+    valid_input = False
     item_id_count += 1
     item_id.append(item_id_count)
 
     item_availability.append("")
+# Error Checking Loops - Ensure no empty values are entered
+    item_names_new = (input("Item name:"))
+    while item_names_new == "":
+        print("Input can not be empty")
+        item_names_new = (input("Item name:"))
+    item_names.append(item_names_new)
 
-    item_names.append(input("Item name:"))
-    item_descriptions.append(input("Description:"))
-    item_costs.append(float(input("Price per day: $")))
+    item_descriptions_new = (input("Description:"))
+    while item_descriptions_new == "":
+        print("Input can not be empty")
+        item_descriptions_new = (input("Description:"))
+    item_descriptions.append(item_descriptions_new)
+# Try statement to allow user to change input if not in float(numeric) format
+    while not valid_input:
+        try:
+            item_costs_new = (float(input("Price per day: $")))
+            if item_costs_new < 0:
+                print("Price must be >= $0")
+            else:
+                item_costs.append(item_costs_new)
+                valid_input = True
+        except ValueError:
+            print("Enter a valid number")
 
     print("{} ({}), ${:.2f} now available for hire".format(item_names[item_id_count], item_descriptions[item_id_count],
                                                            item_costs[item_id_count]))
 
-    items.append("{} - {} ({}) = $ {}{}".format(item_id[item_id_count], item_names[item_id_count],
-                                                item_descriptions[item_id_count], item_costs[item_id_count],
-                                                item_availability[item_id_count]))
+    items.append("{} - {} ({}) = $ {:>7.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
+                                                      item_descriptions[item_id_count], item_costs[item_id_count],
+                                                      item_availability[item_id_count]))
     return items, item_names, item_costs, item_id_count, item_descriptions, item_availability
 main()
