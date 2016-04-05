@@ -125,19 +125,34 @@ def load_items():
     return item_id, item_names, item_descriptions, item_costs, item_availability, items
 
 
-def hire_items(item_id,item_names, item_availability, item_costs, items):
-    for line in items:
-        print(line)
-    print("Enter number of item to hire")
-    item_to_hire = int(input(">>> "))
-    if item_to_hire in item_id:
-        item_availability[item_to_hire] = "*"
+def hire_items(item_id, item_names, item_availability, item_costs, items):
+    valid_input = False
 
-        items[item_to_hire] += '*'
-        print("{} hired for ${}".format(item_names[item_to_hire], item_costs[item_to_hire]))
-        return item_availability[item_to_hire]
-    else:
-        print("That item is not available for hire")
+    for line in items:
+        if line[-1] != "*":
+            print(line)
+    print("Enter number of item to hire")
+
+    while not valid_input:
+        try:
+            item_to_hire = int(input(">>> "))
+            if item_to_hire > (len(item_id) - 1):
+                print("Invalid item number")
+            elif item_to_hire in item_id and "*" not in items[item_to_hire]:
+                item_availability[item_to_hire] = "*"
+
+                items[item_to_hire] += '*'
+                print("{} hired for ${}".format(item_names[item_to_hire], item_costs[item_to_hire]))
+
+                valid_input = True
+
+                return item_availability[item_to_hire]
+            elif "*" in items[item_to_hire]:
+                print("That item is not on hire")
+            else:
+                print("Invalid item number")
+        except ValueError:
+            print("Invalid input, enter a number")
 
 
 def return_items(item_id,item_names, item_availability, item_costs, items):
@@ -148,7 +163,7 @@ def return_items(item_id,item_names, item_availability, item_costs, items):
     if item_to_return in item_id:
         item_availability[item_to_return] = ""
 
-        items[item_to_return] += " "
+        items[item_to_return] += ""
         print("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
                                         item_costs[item_to_return], item_availability[item_to_return]))
         print(item_names[item_to_return], "returned")
