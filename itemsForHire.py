@@ -181,6 +181,7 @@ def add_items(item_id, item_names, item_descriptions, item_costs, item_availabil
 
     item_availability.append("")
 # Error Checking Loops - Ensure no empty values are entered
+    # CAN POSSIBLY ADD THESE LOOPS TO TRY STATEMENT TO MINIMISE CODE LENGTH
     item_names_new = (input("Item name:"))
     while item_names_new == "":
         print("Input can not be empty")
