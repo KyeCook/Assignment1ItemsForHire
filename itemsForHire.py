@@ -72,8 +72,7 @@ def main():
     print("Welcome to the Items For Hire Program")
     print("Written by Kye Cook, March 2016")
 
-    item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count, items_list \
-        = load_items()
+    item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count = load_items()
 
     print(MENU)
     menu_selection = input(">>> ").upper()
@@ -93,7 +92,7 @@ def main():
             print("Error")
         print(MENU)
         menu_selection = input(">>> ").upper()
-    update_csv(item_names, item_descriptions, item_costs, item_availability, items, item_id_count)
+    update_csv(item_names, item_descriptions, item_costs, item_availability, items)
     print("{} items saved to items.csv\nHave a nice day :)".format(len(item_id)))
 
 
@@ -107,7 +106,6 @@ def load_items():
     item_availability = []
     item_id = []
     items = []
-    items_list = []
 
     item_id_count = -1
 
@@ -123,12 +121,10 @@ def load_items():
             item_availability.append("*")
         else:
             item_availability.append("")
-        items.append("{} - {} ({}) = $ {:>7.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
-                                                          item_descriptions[item_id_count], item_costs[item_id_count],
-                                                          item_availability[item_id_count]))
-        items_list.append([item_names[item_id_count], item_descriptions[item_id_count], item_costs[item_id_count],
-                           item_availability[item_id_count]])
-    return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count, items_list
+        string_for_formatting = "{} ({})".format(item_names[item_id_count], item_descriptions[item_id_count],)
+        items.append("{} - {:<40s} = $ {:>7.2f}{}".format(item_id[item_id_count], string_for_formatting,
+                                                          item_costs[item_id_count], item_availability[item_id_count]))
+    return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count
 
 
 def hire_items(item_id, item_names, item_availability, item_costs, items):
@@ -178,14 +174,12 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
                 item_availability[item_to_return] = ""
 
                 items[item_to_return] = ("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
-                                                item_costs[item_to_return], item_availability[item_to_return]))
+                                         item_costs[item_to_return], item_availability[item_to_return]))
 
                 print("{} hired for ${}".format(item_names[item_to_return], item_costs[item_to_return]))
 
                 valid_input = True
-                print(items)
-                print("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
-                                                item_costs[item_to_return], item_availability[item_to_return]))
+
                 return item_availability[item_to_return]
             elif "*" not in items[item_to_return]:
                 print("That item is not on hire")
@@ -193,21 +187,6 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
                 print("Invalid item number")
         except ValueError:
             print("Invalid input, enter a number")
-
-        # for line in items:
-    #     print(line)
-    # print("Enter number of item to return")
-    # item_to_return = int(input(">>> "))
-    # if item_to_return in item_id:
-    #     item_availability[item_to_return] = ""
-    #
-    #     items[item_to_return] += ""
-    #     print("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
-    #                                     item_costs[item_to_return], item_availability[item_to_return]))
-    #     print(item_names[item_to_return], "returned")
-    #     return item_availability[item_to_return]
-    # else:
-    #     print("That item is not on hire")
 
 
 def add_items(item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count):
@@ -249,10 +228,10 @@ def add_items(item_id, item_names, item_descriptions, item_costs, item_availabil
     return items, item_names, item_costs, item_id_count, item_descriptions, item_availability
 
 
-def update_csv(item_names, item_descriptions, item_costs, item_availability, items, item_id_count):
+def update_csv(item_names, item_descriptions, item_costs, item_availability, items):
     f = open('items2.csv', 'w')
     count = -1
-    mockup_items = []
+    item_list_update = []
     item_availability_old = []
     for line in items:
         count += 1
@@ -260,14 +239,9 @@ def update_csv(item_names, item_descriptions, item_costs, item_availability, ite
             item_availability_old.append("out")
         else:
             item_availability_old.append("in")
-        mockup_items.append([item_names[count], item_descriptions[count], str(item_costs[count]),
-                             item_availability_old[count]])
-    for line in mockup_items:
+        item_list_update.append([item_names[count], item_descriptions[count], str(item_costs[count]),
+                                item_availability_old[count]])
+    for line in item_list_update:
         f.write(','.join(line) + '\n')
-        # csv.writer(line)
     f.close()
-    # for line in items_list:
-    #     print(line)
-    # items_update = csv.writer(f)
-    # f.write(item_names + item_descriptions + item_costs + item_availability)
 main()
