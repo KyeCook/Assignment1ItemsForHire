@@ -72,7 +72,8 @@ def main():
     print("Welcome to the Items For Hire Program")
     print("Written by Kye Cook, March 2016")
 
-    item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count = load_items()
+    item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count, items_list \
+        = load_items()
 
     print(MENU)
     menu_selection = input(">>> ").upper()
@@ -92,7 +93,7 @@ def main():
             print("Error")
         print(MENU)
         menu_selection = input(">>> ").upper()
-    update_csv(item_names, item_descriptions, item_costs, item_availability)
+    update_csv(item_names, item_descriptions, item_costs, item_availability, items, item_id_count)
     print("{} items saved to items.csv\nHave a nice day :)".format(len(item_id)))
 
 
@@ -106,6 +107,7 @@ def load_items():
     item_availability = []
     item_id = []
     items = []
+    items_list = []
 
     item_id_count = -1
 
@@ -124,8 +126,9 @@ def load_items():
         items.append("{} - {} ({}) = $ {:>7.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
                                                           item_descriptions[item_id_count], item_costs[item_id_count],
                                                           item_availability[item_id_count]))
-
-    return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count
+        items_list.append([item_names[item_id_count], item_descriptions[item_id_count], item_costs[item_id_count],
+                           item_availability[item_id_count]])
+    return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count, items_list
 
 
 def hire_items(item_id, item_names, item_availability, item_costs, items):
@@ -174,7 +177,8 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
             elif item_to_return in item_id and "*" in items[item_to_return]:
                 item_availability[item_to_return] = ""
 
-                items[item_to_return] += " "
+                items[item_to_return] = ("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
+                                                item_costs[item_to_return], item_availability[item_to_return]))
 
                 print("{} hired for ${}".format(item_names[item_to_return], item_costs[item_to_return]))
 
@@ -245,9 +249,25 @@ def add_items(item_id, item_names, item_descriptions, item_costs, item_availabil
     return items, item_names, item_costs, item_id_count, item_descriptions, item_availability
 
 
-def update_csv(item_names, item_descriptions, item_costs, item_availability):
-    f = open('items.csv')
-    items_update = csv.writer(f)
-    items_update.writerows()
-
+def update_csv(item_names, item_descriptions, item_costs, item_availability, items, item_id_count):
+    f = open('items2.csv', 'w')
+    count = -1
+    mockup_items = []
+    item_availability_old = []
+    for line in items:
+        count += 1
+        if item_availability[count] == "*":
+            item_availability_old.append("out")
+        else:
+            item_availability_old.append("in")
+        mockup_items.append([item_names[count], item_descriptions[count], str(item_costs[count]),
+                             item_availability_old[count]])
+    for line in mockup_items:
+        f.write(','.join(line) + '\n')
+        # csv.writer(line)
+    f.close()
+    # for line in items_list:
+    #     print(line)
+    # items_update = csv.writer(f)
+    # f.write(item_names + item_descriptions + item_costs + item_availability)
 main()
