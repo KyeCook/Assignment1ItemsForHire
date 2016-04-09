@@ -131,11 +131,17 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
             display "Item not on hire"
     """
     valid_input = False
+    in_count = 0
 
 # Checks to see if last value within each row is a "*". This allows for only items that are 'in' to be displayed
     for line in items:
         if line[-1] != "*":
+            in_count += 1
             print(line)
+# Checks to see if any items are in stock. Returns to menu if no items available
+    if in_count <= 0:
+        print("No items are currently available for hire")
+        return item_availability
     print("Enter number of item to hire")
 
     while not valid_input:
@@ -156,6 +162,7 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
                 return item_availability[item_to_hire]
             elif "*" in items[item_to_hire]:
                 print("That item is not available for hire")
+                return item_availability
             else:
                 print("Invalid item number")
         except ValueError:
@@ -164,11 +171,17 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
 
 def return_items(item_id, item_names, item_availability, item_costs, items):
     valid_input = False
+    out_count = 0
 
 # Checks to see if last value within each row is a "". This allows for only items that are 'out' to be displayed
     for line in items:
         if line[-1] == "*":
+            out_count += 1
             print(line)
+# Checks to see if any items are out of stock. Returns to menu if all items in stock
+    if out_count <= 0:
+        print("No items are currently on hire")
+        return item_availability
     print("Enter number of item to return")
 
     while not valid_input:
@@ -189,8 +202,10 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
                 valid_input = True
 
                 return item_availability[item_to_return]
+
             elif "*" not in items[item_to_return]:
                 print("That item is not on hire")
+                return item_availability
             else:
                 print("Invalid item number")
         except ValueError:
