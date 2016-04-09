@@ -7,6 +7,7 @@ GitHub Repository Link : https://github.com/KyeCook
 """
 import csv
 
+FILE_NAME = "items.csv"
 MENU = "Menu:\n(L)ist all items\n(H)ire an item\n(R)eturn an item\n(A)dd new item to stock\n(Q)uit"
 
 
@@ -68,7 +69,7 @@ def load_items():
     :return: items
     """
 
-    f = open('items.csv')
+    f = open(FILE_NAME)
     csv_f = csv.reader(f)
 
     item_names = []
@@ -154,7 +155,7 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
 
                 return item_availability[item_to_hire]
             elif "*" in items[item_to_hire]:
-                print("That item is not on hire")
+                print("That item is not available for hire")
             else:
                 print("Invalid item number")
         except ValueError:
@@ -168,7 +169,7 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
     for line in items:
         if line[-1] == "*":
             print(line)
-    print("Enter number of item to hire")
+    print("Enter number of item to return")
 
     while not valid_input:
         # This statement error checks users input to ensure it is of a numerical value. Gives a generated error message
@@ -183,7 +184,7 @@ def return_items(item_id, item_names, item_availability, item_costs, items):
                 items[item_to_return] = ("{} - {} = $ {}{}".format(item_id[item_to_return], item_names[item_to_return],
                                          item_costs[item_to_return], item_availability[item_to_return]))
 
-                print("{} hired for ${}".format(item_names[item_to_return], item_costs[item_to_return]))
+                print(item_names[item_to_return], "returned")
 
                 valid_input = True
 
@@ -238,7 +239,7 @@ def add_items(item_id, item_names, item_descriptions, item_costs, item_availabil
 
 def update_csv(item_names, item_descriptions, item_costs, item_availability, items):
     # Needs to re-open file in new write format
-    f = open('items2.csv', 'w')
+    f = open(FILE_NAME, 'w')
     count = -1
     item_list_update = []
     item_availability_old = []
