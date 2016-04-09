@@ -2,66 +2,8 @@
 CP1404 - Assignment 1 : 2016
 Items For Hire
 Kye Cook
-29/03/2016
+Start Date - 29/03/2016
 GitHub Repository Link : https://github.com/KyeCook
-
-Pseudocode:
-
-Function Main()
-    call load_items()
-    set load_items() as tuple variable called items
-    display welcome message
-    display MENU
-    get choice
-    while choice is not 'Q'
-        if choice is 'L'
-            display items
-        else if choice is 'H'
-            call hire_items()
-        else if choice is 'R'
-            call return_items()
-        else if choice = 'A'
-            call add_items()
-        else
-            display error message
-        display MENU
-        get choice
-    print thank you message and number of items saved into list
-
-
-Function load_items()
-    load items.csv document
-    convert into tuple (?here or in main?)
-    return loaded document
-
-
-Function hire_items()
-    get choice
-    if choice is in stock
-        display item hired
-        return item hired
-    else:
-        print item is not currently in stock
-
-
-Function return_items(items)
-    while items are hired
-        get choice
-        if choice is in items
-            make item returned on list
-            return items
-        else
-            print error message
-    print no items are hired
-
-
-Function add_items(items)
-    get choice for item name
-    get choice for description
-    get choice for price per day
-    print item name(description), price per day now available for hire
-    concatenate to items tuple
-    return items
 """
 import csv
 
@@ -97,6 +39,35 @@ def main():
 
 
 def load_items():
+    """
+    Pseudocode:
+
+    load items.csv document
+
+    item_names = empty list
+    item_descriptions = empty list
+    item_cost = empty list
+    item_availability = empty list
+    item_id = empty list
+    items = empty list
+    count = -1
+
+    for row in items.csv
+        count = count + 1
+        item_id = item_id + count
+        item_names = item_names + row 1 of items.csv
+        item_descriptions = item_descriptions + row 2 of items.csv
+        item_cost = item_cost + row 3 of items.csv
+
+        if row 4 of items.csv = "out"
+            item_availability = item_availability + "*"
+        else
+            item_availability = item_availability + ""
+        items = items + item_id, item_names, item_descriptions, items_cost, item_availability
+
+    :return: items
+    """
+
     f = open('items.csv')
     csv_f = csv.reader(f)
 
@@ -128,6 +99,31 @@ def load_items():
 
 
 def hire_items(item_id, item_names, item_availability, item_costs, items):
+    """
+    Pseudocode:
+
+    :param items:
+    :param item_id:
+    :param item_names:
+    :param item_costs:
+    :param item_availability:
+    valid_input = False
+
+    for line in items
+        if last value in line not = "*"
+            display line
+    display("Enter number of item to hire")
+    while not valid_input
+        get item_to_hire
+        if item_to_hire is in first row of items
+            last row of items = "*"
+            item_availabilities = "*"
+            display "Item hired"
+            valid_input = True
+            :return: items
+        else
+            display "Item not on hire"
+    """
     valid_input = False
 
     for line in items:
