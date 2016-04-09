@@ -80,6 +80,7 @@ def load_items():
 
     item_id_count = -1
 
+# Reads each row in items.csv and appends data to appropriate list.
     for row in csv_f:
         item_id_count += 1
 
@@ -92,9 +93,13 @@ def load_items():
             item_availability.append("*")
         else:
             item_availability.append("")
+
+# Formats 2 variables into one to achieve same formatting as examples
         string_for_formatting = "{} ({})".format(item_names[item_id_count], item_descriptions[item_id_count],)
+# Actually applies formatting to items contents
         items.append("{} - {:<40s} = $ {:>7.2f}{}".format(item_id[item_id_count], string_for_formatting,
                                                           item_costs[item_id_count], item_availability[item_id_count]))
+
     return item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count
 
 
@@ -126,12 +131,15 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
     """
     valid_input = False
 
+# Checks to see if last value within each row is a "*". This allows for only items that are 'in' to be displayed
     for line in items:
         if line[-1] != "*":
             print(line)
     print("Enter number of item to hire")
 
     while not valid_input:
+        # This statement error checks users input to ensure it is of a numerical value. Gives a generated error message
+        # rather than python crash. Allows user to re-enter value until correct.
         try:
             item_to_hire = int(input(">>> "))
             if item_to_hire > (len(item_id) - 1):
@@ -156,12 +164,15 @@ def hire_items(item_id, item_names, item_availability, item_costs, items):
 def return_items(item_id, item_names, item_availability, item_costs, items):
     valid_input = False
 
+# Checks to see if last value within each row is a "". This allows for only items that are 'out' to be displayed
     for line in items:
         if line[-1] == "*":
             print(line)
     print("Enter number of item to hire")
 
     while not valid_input:
+        # This statement error checks users input to ensure it is of a numerical value. Gives a generated error message
+        # rather than python crash. Allows user to re-enter value until correct.
         try:
             item_to_return = int(input(">>> "))
             if item_to_return > (len(item_id) - 1):
@@ -221,14 +232,17 @@ def add_items(item_id, item_names, item_descriptions, item_costs, item_availabil
     items.append("{} - {} ({}) = $ {:>7.2f}{}".format(item_id[item_id_count], item_names[item_id_count],
                                                       item_descriptions[item_id_count], item_costs[item_id_count],
                                                       item_availability[item_id_count]))
+
     return items, item_names, item_costs, item_id_count, item_descriptions, item_availability
 
 
 def update_csv(item_names, item_descriptions, item_costs, item_availability, items):
+    # Needs to re-open file in new write format
     f = open('items2.csv', 'w')
     count = -1
     item_list_update = []
     item_availability_old = []
+    # Merges items into original list format style to be saved to the CSV file
     for line in items:
         count += 1
         if item_availability[count] == "*":
@@ -237,6 +251,7 @@ def update_csv(item_names, item_descriptions, item_costs, item_availability, ite
             item_availability_old.append("in")
         item_list_update.append([item_names[count], item_descriptions[count], str(item_costs[count]),
                                 item_availability_old[count]])
+    # Writes to CSV file for each line
     for line in item_list_update:
         f.write(','.join(line) + '\n')
     f.close()
