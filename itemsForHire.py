@@ -32,7 +32,7 @@ def main():
         elif menu_selection == "A":
             add_items(item_id, item_names, item_descriptions, item_costs, item_availability, items, item_id_count)
         else:
-            print("Error")
+            print("Invalid Menu Choice")
         print(MENU)
         menu_selection = input(">>> ").upper()
     update_csv(item_names, item_descriptions, item_costs, item_availability, items)
